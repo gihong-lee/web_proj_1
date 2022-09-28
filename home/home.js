@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
 
-const DB_Info = require('./lib/DB_Info')
+const DB_Info = require('/app/lib/DB_Info')
 
 const port = 3000;
 const app = express();
@@ -19,9 +19,9 @@ app.use(session({
   store: new FileStore()
 }))
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/javascript',express.static('javascript'));
+app.use('/app/javascript',express.static('javascript'));
 
-const template = require('./lib/template')
+const template = require('/app/lib/template')
 
 app.get('/',(req, res) => {
   const html = `
