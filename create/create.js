@@ -6,7 +6,7 @@ const FileStore = require('session-file-store')(session)
 
 const DB_Info = require('/app/lib/DB_Info')
 
-const port = 3000;
+const port = 8000;
 const app = express();
 
 app.use(cookieParser());
