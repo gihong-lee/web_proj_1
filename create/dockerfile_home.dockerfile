@@ -3,8 +3,8 @@ FROM node:15.14-slim
 WORKDIR /app
 
 COPY ./package*.json /app/
-COPY ./lib/ /app/
-COPY ./javascript/ /app/
+COPY ./lib/ /app/lib/
+COPY ./javascript/ /app/javascript/
 
 RUN npm install
 
