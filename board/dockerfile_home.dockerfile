@@ -10,6 +10,6 @@ RUN npm install
 
 COPY ./board.js /app
 
-EXPOSE 3000
+EXPOSE 8000
 
 CMD ["node", "/app/board.js"]

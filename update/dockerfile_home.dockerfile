@@ -8,8 +8,8 @@ COPY ./javascript/ /app/
 
 RUN npm install
 
-COPY ./home.js /app
+COPY ./update.js /app
 
 EXPOSE 8000
 
-CMD ["node", "/app/home.js"]
+CMD ["node", "/app/update.js"]
