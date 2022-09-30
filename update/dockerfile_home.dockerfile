@@ -6,6 +6,7 @@ COPY ./package*.json /app/
 COPY ./lib/ /app/lib/
 COPY ./javascript/ /app/javascript/
 
+RUN chmod 777 /app/
 RUN npm install
 
 COPY ./update.js /app

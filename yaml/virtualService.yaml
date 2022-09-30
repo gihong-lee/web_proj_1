@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: board
+spec:
+  hosts:
+  - board
+  http:
+  - route:
+    - destination:
+        host: board
+        subset: mysql-v1
+---
