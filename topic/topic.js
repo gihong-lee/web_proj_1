@@ -3,6 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
+const mysql = require('mysql');
 
 const DB_Info = require('/app/lib/DB_Info')
 

@@ -3,6 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
+const mysql = require('mysql');
 
 const DB_Info = require('/app/lib/DB_Info')
 
@@ -22,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/app/javascript',express.static('javascript'));
 
 const template = require('/app/lib/template')
-const mysql = require('mysql');
 const DB = mysql.createConnection({
 	host:DB_Info.host,
 	port:DB_Info.port,
@@ -30,7 +30,7 @@ const DB = mysql.createConnection({
 	password:DB_Info.password,
 	database:DB_Info.account
 });
-
+console.log(DB_Info)
 DB.connect();
 
 app.get('/board',(req, res) =>{
