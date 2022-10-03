@@ -24,11 +24,12 @@ spec:
       - name: home
         image: gihonglee/home:3
         imagePullPolicy: IfNotPresent
-        ports:        env:
+        env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
@@ -59,7 +60,7 @@ spec:
       - name: board
         image: gihonglee/board:1
         imagePullPolicy: IfNotPresent
-                env:
+        env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
@@ -95,7 +96,7 @@ spec:
       - name: auth
         image: gihonglee/auth:1
         imagePullPolicy: IfNotPresent
-                env:
+        env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
@@ -131,7 +132,7 @@ spec:
       - name: create
         image: gihonglee/create:1
         imagePullPolicy: IfNotPresent
-                env:
+        env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
@@ -167,7 +168,7 @@ spec:
       - name: topic
         image: gihonglee/topic:1
         imagePullPolicy: IfNotPresent
-                env:
+        env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT

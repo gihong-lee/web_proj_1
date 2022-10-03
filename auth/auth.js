@@ -18,7 +18,7 @@ app.use(session({
   //cookie: { secure: true},
   store: new FileStore()
 }))
-app.use(bodyParseapp.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/app/javascript',express.static('javascript'));
 
 const template = require('/app/lib/template')
