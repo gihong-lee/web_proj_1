@@ -24,15 +24,16 @@ app.use('/app/javascript',express.static('javascript'));
 const template = require('/app/lib/template')
 const mysql = require('mysql');
 const DB = mysql.createConnection({
-    host:DB_Info.host,
-    user:DB_Info.user,
-    password:DB_Info.password,
-    database:DB_Info.database
+	host:DB_Info.host,
+	port:DB_Info.port,
+	user:DB_Info.user,
+	password:DB_Info.password,
+	database:DB_Info.account
 });
 
 DB.connect();
 
-app.get('/',(req, res) =>{
+app.get('/board',(req, res) =>{
 	const queryData = req.query; 
 	const page = template.beNumOrDef(queryData.page,0);
 	let listingNum = Number(req.cookies.listingNum);

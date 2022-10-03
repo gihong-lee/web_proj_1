@@ -1,17 +1,6 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: home
-  labels:
-    app: home
-    service: home
-spec:
-  ports:
-  - port: 8080
-    name: http
-  selector:
-    app: home
----
+##################################################################################################
+# home service
+##################################################################################################
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,31 +21,21 @@ spec:
         version: v1
     spec:
       containers:
-      - name: home:1
-        image: 
+      - name: home
+        image: gihonglee/home:3
         imagePullPolicy: IfNotPresent
-        ports:
+        ports:        env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"     
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
 ---
 ##################################################################################################
-# Ratings service
+# board service
 ##################################################################################################
-apiVersion: v1
-kind: Service
-metadata:
-  name: board
-  labels:
-    app: board
-    service: board
-spec:
-  ports:
-  - port: 9080
-    name: http
-  selector:
-    app: board
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -76,69 +55,160 @@ spec:
         app: board
         version: v1
     spec:
-      serviceAccountName: bookinfo-board
       containers:
-      - name: board:1
-        image: 
+      - name: board
+        image: gihonglee/board:1
         imagePullPolicy: IfNotPresent
+                env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"     
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: grad-db
-  labels:
-    app: grad-db
-    service: grad-db
-spec:
-  ports:
-  - port: 3306
-    name: tcp
-  selector:
-    app: grad-db
----
+##################################################################################################
+# auth service
+##################################################################################################
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grad-db-v1
+  name: auth-v1
   labels:
-    app: grad-db
-    version: mysql-v1
+    app: auth
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grad-db
-      version: mysql-v1
+      app: auth
+      version: v1
   template:
     metadata:
       labels:
-        app: grad-db
-        version: mysql-v1
+        app: auth
+        version: v1
     spec:
-      serviceAccountName: bookinfo-grad-db
       containers:
-      - name: grad-db:1
-        image: 
+      - name: auth
+        image: gihonglee/auth:1
         imagePullPolicy: IfNotPresent
-        env:
-          # This assumes you registered your mysql vm as
-          # istioctl register -n vm mysqldb 1.2.3.4 3306
-          - name: DB_TYPE
-            value: "mysql"
-          - name: MYSQL_DB_HOST
-            value: mysqldb.vm.svc.cluster.local
-          - name: MYSQL_DB_PORT
-            value: "3306"
-          - name: MYSQL_DB_USER
-            value: root
-          - name: MYSQL_DB_PASSWORD
-            value: password
+                env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"     
         ports:
-        - containerPort: 3306
+        - containerPort: 8000
         securityContext:
           runAsUser: 1000
 ---
+##################################################################################################
+# create service
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: create-v1
+  labels:
+    app: create
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: create
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: create
+        version: v1
+    spec:
+      containers:
+      - name: create
+        image: gihonglee/create:1
+        imagePullPolicy: IfNotPresent
+                env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"     
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000
+---
+##################################################################################################
+# topic service
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: topic-v1
+  labels:
+    app: topic
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: topic
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: topic
+        version: v1
+    spec:
+      containers:
+      - name: topic
+        image: gihonglee/topic:1
+        imagePullPolicy: IfNotPresent
+                env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"     
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000
+---
+##################################################################################################
+# update service
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: update-v1
+  labels:
+    app: update
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: update
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: update
+        version: v1
+    spec:
+      containers:
+      - name: update
+        image: gihonglee/update:1
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_HOST
+            value: grad-db.default.svc.cluster.local
+          - name: MYSQL_PORT
+            value: "3306"          
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000

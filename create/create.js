@@ -24,15 +24,16 @@ app.use('/app/javascript',express.static('javascript'));
 const template = require('/app/lib/template')
 const mysql = require('mysql');
 const DB = mysql.createConnection({
-    host:DB_Info.host,
-    user:DB_Info.user,
-    password:DB_Info.password,
-    database:DB_Info.database
+	host:DB_Info.host,
+	port:DB_Info.port,
+	user:DB_Info.user,
+	password:DB_Info.password,
+	database:DB_Info.account
 });
 
 DB.connect();
 
-app.get('/',(req,res) => {
+app.get('/Create',(req,res) => {
 	if(!req.session.is_logined) {
 	  res.redirect(`/`);
 	  return false;
@@ -52,7 +53,7 @@ app.get('/',(req,res) => {
   
 })
   
-app.post('/create_process',(req, res) => {
+app.post('Create/create_process',(req, res) => {
 console.log(req.session);
 const post = req.body;
 	const title = post.title;

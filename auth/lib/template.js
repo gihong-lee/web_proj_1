@@ -40,8 +40,7 @@ module.exports = {
   },
 
   isLogined: function (req, res){
-    console.log(req.session);
-    if(false){
+    if(req.session.is_logined){
       return `
       <a href= "/auth/account/${req.session.userId}" id ="userName">
         ${req.session.name}

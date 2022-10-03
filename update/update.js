@@ -20,12 +20,19 @@ app.use(session({
 }))
 app.use(bodyParseapp.urlencoded({ extended: false }));
 app.use('/app/javascript',express.static('javascript'));
+const DB = mysql.createConnection({
+	host:DB_Info.host,
+	port:DB_Info.port,
+	user:DB_Info.user,
+	password:DB_Info.password,
+	database:DB_Info.account
+});
 
 const template = require('/app/lib/template')
 
 DB.connect();
 
-app.get('/:tid/edit',(req,res) => {
+app.get('/update/:tid/edit',(req,res) => {
   const topicId = req.params.tid;
   DB.query(`SELECT * FROM topic WHERE id = ?;`, [topicId], (err, topic) => {
     if(err) throw err;
@@ -56,7 +63,7 @@ app.get('/:tid/edit',(req,res) => {
   });
 })
 
-app.patch('/update_process',(req, res) => {
+app.patch('/update/update_process',(req, res) => {
   var post = req.body;
 	var id = Number(post.tid);
 	var title = post.title;
@@ -68,7 +75,7 @@ app.patch('/update_process',(req, res) => {
   }); 
 })
 
-app.delete('/delete_process',(req, res) => {
+app.delete('/update/delete_process',(req, res) => {
   const id = req.body.tid;
 	DB.query('DELETE FROM topic WHERE id = ?;', [id],(err, result) => {
     if (err) throw err;

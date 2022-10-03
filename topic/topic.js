@@ -20,12 +20,19 @@ app.use(session({
 }))
 app.use(bodyParseapp.urlencoded({ extended: false }));
 app.use('/app/javascript',express.static('javascript'));
+const DB = mysql.createConnection({
+	host:DB_Info.host,
+	port:DB_Info.port,
+	user:DB_Info.user,
+	password:DB_Info.password,
+	database:DB_Info.account
+});
 
 const template = require('/app/lib/template')
 
 DB.connect();
 
-app.get('/:tid', (req, res) => {
+app.get('/topic/:tid', (req, res) => {
   const sessionID = req.session.userId;
   const idData = req.params;
   const topicId = template.beNumOrDef(idData.tid,false);
@@ -60,7 +67,7 @@ app.get('/:tid', (req, res) => {
   });
 });
 
-app.patch('/:tid',(req, res) => {
+app.patch('/topic/:tid',(req, res) => {
   const tid = req.params.tid;
   const title = req.body.title;
   const context = req.body.context;
@@ -72,7 +79,7 @@ app.patch('/:tid',(req, res) => {
   });
 })
 
-app.delete('/:tid',(req, res) => {
+app.delete('/topic/:tid',(req, res) => {
   const tid = Number(req.params.tid);
 
   DB.query(`DELETE FROM topic WHERE id = ?;`, [tid], (err, result) =>{
@@ -84,7 +91,7 @@ app.delete('/:tid',(req, res) => {
   })
 })
 
-app.post('/:tid/comment', (req, res) => {
+app.post('/topic/:tid/comment', (req, res) => {
   const userId = req.session.userId;
   const context = req.body.context;
   
@@ -99,7 +106,7 @@ app.post('/:tid/comment', (req, res) => {
   })
 })
 
-app.patch('/:tid/comment/:cid',(req, res) => {
+app.patch('/topic/:tid/comment/:cid',(req, res) => {
   DB.query('SELECT * FROM comment WHERE id = ?;' ,[req.params.cid], (err1, result) => {
     if(err1) throw err1;
     console.log(result[0].author_id)
@@ -114,7 +121,7 @@ app.patch('/:tid/comment/:cid',(req, res) => {
   })
 })
 
-app.delete('/:tid/comment/:cid', (req, res) => {
+app.delete('/topic/:tid/comment/:cid', (req, res) => {
   DB.query('SELECT * FROM comment WHERE id = ?;' ,[req.params.cid], (err1, result) => {
     if(err1) {
       res.status(401).send()
@@ -131,7 +138,7 @@ app.delete('/:tid/comment/:cid', (req, res) => {
   })
 })
 
-app.get('/wrongpath',(req, res) => {
+app.get('/topic/wrongpath',(req, res) => {
   const html = template.html('Wrong Path', '','','','');
   res.send(html)
 });

@@ -25,6 +25,7 @@ const template = require('/app/lib/template')
 
 const DB = mysql.createConnection({
   host:DB_Info.host,
+  port:DB_Info.port,
   user:DB_Info.user,
   password:DB_Info.password,
   database:DB_Info.account
@@ -32,7 +33,7 @@ const DB = mysql.createConnection({
 
 DB.connect()
 
-app.get('/login',(req, res) => {
+app.get('/auth/login',(req, res) => {
   const html = template.html('Login','','',
   `<form action= "/auth/login/login_process" method ="post">
   <input type="text"name = "aid" placeholder="ID">
@@ -42,7 +43,7 @@ app.get('/login',(req, res) => {
   res.send(html);
 })
 
-app.post('/login/login_process',(req, res) => {
+app.post('/auth/login/login_process',(req, res) => {
   const data = req.body;
   console.log(data);
   DB.query('SELECT id, name FROM user WHERE user_id = ? AND password = ?',[data.aid, data.password], (err, result) => {
@@ -61,14 +62,14 @@ app.post('/login/login_process',(req, res) => {
   })
 })
 
-app.get('/logout_process', (req, res) => {
+app.get('/auth/logout_process', (req, res) => {
   req.session.destroy((err) => {
     if(err) throw err;
     res.redirect('/')
   })
 })
 
-app.get('/join',(req, res) => {
+app.get('/auth/join',(req, res) => {
   const html = template.html('Join', '', '',
   `<form action="/auth/join_process" method="post">
     <p>
@@ -89,7 +90,7 @@ app.get('/join',(req, res) => {
   res.send(html);
 })
 
-app.get('/join/check_dup', (req, res) => {
+app.get('/auth/join/check_dup', (req, res) => {
   const value = req.query.value;
   const isId = req.query.isId;
   
@@ -110,7 +111,7 @@ app.get('/join/check_dup', (req, res) => {
   })
 })//수정 => get
 
-app.post('/join_process',(req, res) => {
+app.post('/auth/join_process',(req, res) => {
   const data = req.body;
   console.log(data);
   DB.query('INSERT INTO user (user_id, password, name) VALUES (?, ?, ?)', 
@@ -121,7 +122,7 @@ app.post('/join_process',(req, res) => {
   })
 })
 
-app.get('/account/:uid', (req, res) => {
+app.get('/auth/account/:uid', (req, res) => {
   if(!req.session.is_logined) res.status(401).send()
   else{
     const html = template.account.html(req.session)
@@ -129,7 +130,7 @@ app.get('/account/:uid', (req, res) => {
   }
 })
 
-app.get('/account/:uid/check_dup', (req, res) => {//중복 검사 url 구조가 이상함..
+app.get('/auth/account/:uid/check_dup', (req, res) => {//중복 검사 url 구조가 이상함..
   DB.query('SELECT * FROM user WHERE name = ?;',[req.query.name], (err, result) => {
     if(err) throw err;
     console.log(result)
@@ -141,7 +142,7 @@ app.get('/account/:uid/check_dup', (req, res) => {//중복 검사 url 구조가 
   })
 })
 
-app.patch('/account/:uid', (req, res) => {
+app.patch('/auth/account/:uid', (req, res) => {
   const uid = Number(req.params.uid);
   const body = req.body;
   if(body.isPW){// pw 변경이면
@@ -173,7 +174,7 @@ app.patch('/account/:uid', (req, res) => {
   
 })
 
-app.delete('/account/:uid', (req, res) => {
+app.delete('/auth/account/:uid', (req, res) => {
   const uid = Number(req.params.uid);
 
   DB.query('SELECT password FROM user WHERE id = ?;', [uid], (PWerr, PW) => {

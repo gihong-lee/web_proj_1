@@ -21,6 +21,8 @@ CREATE TABLE `topic` (
   PRIMARY KEY (`id`)
 );
 
+ALTER user 'root'@'%' identified WITH mysql_native_password BY '111111';
+
 -- INSERT INTO topic (title, context, created, author_id) VALUES ('text #1', 'text #1', NOW(), 5)
 -- INSERT INTO topic (title, context, created, author_id) VALUES ('text #2', 'text #2', NOW(), 1)
 -- INSERT INTO topic (title, context, created, author_id) VALUES ('text #3', 'text #3', NOW(), 4)
