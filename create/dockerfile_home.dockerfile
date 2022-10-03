@@ -7,7 +7,7 @@ COPY ./lib/ /app/lib/
 COPY ./javascript/ /app/javascript/
 
 RUN chmod 777 /app/
-RUN mkdir -p /app/sessions
+RUN mkdir -p /app/sessions/
 RUN npm install
 
 COPY ./create.js /app

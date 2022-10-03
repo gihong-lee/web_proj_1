@@ -58,7 +58,7 @@ spec:
     spec:
       containers:
       - name: board
-        image: gihonglee/board:1
+        image: gihonglee/board:3
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -94,7 +94,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: gihonglee/auth:1
+        image: gihonglee/auth:3
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -130,7 +130,7 @@ spec:
     spec:
       containers:
       - name: create
-        image: gihonglee/create:1
+        image: gihonglee/create:3
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -166,7 +166,7 @@ spec:
     spec:
       containers:
       - name: topic
-        image: gihonglee/topic:1
+        image: gihonglee/topic:3
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -202,7 +202,7 @@ spec:
     spec:
       containers:
       - name: update
-        image: gihonglee/update:1
+        image: gihonglee/update:3
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST

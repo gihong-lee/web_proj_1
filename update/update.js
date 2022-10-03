@@ -10,7 +10,7 @@ const port = 8000;
 const app = express();
 
 app.use(cookieParser());
-app.use(bodyParseapp.json());
+app.use(bodyParser.json());
 app.use(session({
   secret: DB_Info.password,
   resave: false,
