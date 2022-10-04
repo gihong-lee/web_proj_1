@@ -87,7 +87,7 @@ app.get('/auth/join',(req, res) => {
       <button type="button" id = "nameCheck">중복확인</button>
     </p>
     <input type="submit">
-  </form>`, '<script src="../javascript/joinApp.js"></script>');
+  </form>`, '<script src="/app/javascript/joinApp.js"></script>');
   res.send(html);
 })
 

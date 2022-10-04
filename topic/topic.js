@@ -26,7 +26,7 @@ const DB = mysql.createConnection({
 	port:DB_Info.port,
 	user:DB_Info.user,
 	password:DB_Info.password,
-	database:DB_Info.account
+	database:DB_Info.database
 });
 
 const template = require('/app/lib/template')
@@ -60,8 +60,8 @@ app.get('/topic/:tid', (req, res) => {
         template.topic.context(topic[0]),
         template.topic.commentCreate(topic[0])+
         template.topic.comment(comments,sessionID)+
-        `<script src="../javascript/cmtApp.js"></script>
-        <script src="../../javascript/editApp.js"></script>`);
+        `<script src="/app/javascript/cmtApp.js"></script>
+        <script src="/app/javascript/editApp.js"></script>`);
   
       res.send(html);
     });

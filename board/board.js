@@ -28,7 +28,7 @@ const DB = mysql.createConnection({
 	port:DB_Info.port,
 	user:DB_Info.user,
 	password:DB_Info.password,
-	database:DB_Info.account
+	database:DB_Info.database
 });
 console.log(DB_Info)
 DB.connect();
@@ -61,7 +61,7 @@ app.get('/board',(req, res) =>{
 					 <option value="20">20</option>
 				 </select>`,
 				 context+`<p>Page : ${page+1} </p>`, pageBar+
-				 '<script src="../javascript/boardApp.js"></script>');
+				 '<script src="/app/javascript/boardApp.js"></script>');
 
 				res.send(html);
 			}

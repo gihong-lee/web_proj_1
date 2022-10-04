@@ -26,7 +26,7 @@ const DB = mysql.createConnection({
 	port:DB_Info.port,
 	user:DB_Info.user,
 	password:DB_Info.password,
-	database:DB_Info.account
+	database:DB_Info.database
 });
 
 const template = require('/app/lib/template')
@@ -59,7 +59,7 @@ app.get('/update/:tid/edit',(req,res) => {
       <div class="topicDelWrap">
         <input type="hidden" name="tid" value="${topicId}">
         <input type="submit" value="delete">
-      </div>`,'<script src="../javascript/updateApp.js"></script>');
+      </div>`,'<script src="/app/javascript/updateApp.js"></script>');
     res.send(html);
   });
 })
