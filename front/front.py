@@ -4,12 +4,12 @@ import os
 
 app = Flask(__name__)
 
-home_addr = os.environ['HOME_ADDR']
-board_addr = os.environ['BOARD_ADDR']
-topic_addr = os.environ['TOPIC_ADDR']
-create_addr = os.environ['CREATE_ADDR']
-auth_addr = os.environ['AUTH_ADDR']
-update_addr = os.environ['UPDATE_ADDR']
+home_addr = "http://" + os.environ['HOME_ADDR'] + ":8080" 
+board_addr = "http://" + os.environ['BOARD_ADDR'] + ":8080"
+topic_addr = "http://" + os.environ['TOPIC_ADDR'] + ":8080"
+create_addr = "http://" + os.environ['CREATE_ADDR'] + ":8080"
+auth_addr = "http://" + os.environ['AUTH_ADDR'] + ":8080"
+update_addr = "http://" + os.environ['UPDATE_ADDR'] + ":8080"
 
 
 def data_parsing(data):
@@ -25,7 +25,7 @@ def data_parsing(data):
 
 @app.route('/')
 def home():
-    req = requests.get(home_addr+"home")
+    req = requests.get(home_addr)
     return req.text
 
 
@@ -109,4 +109,4 @@ def update(uid):
     req = requests.get(auth_addr+f"/account/{uid}")
     return req.text
 
-app.run(host="localhost",port=5001)
+app.run(host='0.0.0.0',port=5001)

@@ -12,6 +12,6 @@ RUN mkdir -p /app/sessions/
 
 COPY ./front.py /app
 
-EXPOSE 50001
+EXPOSE 5001
 
 CMD ["python", "front.py"]
