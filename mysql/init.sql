@@ -21,6 +21,14 @@ CREATE TABLE `topic` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `comment` (
+    `id` Int(11) not null auto_increment,
+    `topic_id` int(11) not null,
+    `context` varchar(100), 
+    `created` DATETIME not null,
+    `author_id` int(11) not null,
+    primary Key(`id`)
+  );
 
 INSERT INTO topic (title, context, created, author_id) VALUES ('text #1', 'text #1', NOW(), 5);
 INSERT INTO topic (title, context, created, author_id) VALUES ('text #2', 'text #2', NOW(), 1);

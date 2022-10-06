@@ -1,14 +1,15 @@
 from flask import Flask, request
 import requests
+import os
 
 app = Flask(__name__)
 
-home_addr = "http://localhost:3000/"
-board_addr = "http://localhost:3000/board"
-topic_addr = "http://localhost:3000/topic"
-create_addr = "http://localhost:3000/Create"
-auth_addr = "http://localhost:3000/auth"
-update_addr = "http://localhost:3000/update"
+home_addr = os.environ['HOME_ADDR']
+board_addr = os.environ['BOARD_ADDR']
+topic_addr = os.environ['TOPIC_ADDR']
+create_addr = os.environ['CREATE_ADDR']
+auth_addr = os.environ['AUTH_ADDR']
+update_addr = os.environ['UPDATE_ADDR']
 
 
 def data_parsing(data):
@@ -24,7 +25,7 @@ def data_parsing(data):
 
 @app.route('/')
 def home():
-    req = requests.get(home_addr)
+    req = requests.get(home_addr+"home")
     return req.text
 
 
@@ -33,14 +34,14 @@ def home():
 
 @app.route('/board/')
 def board():
-    req = requests.get(board_addr)
+    req = requests.get(board_addr+"/board/")
     return req.text
 
 #####################################
 
 @app.route('/topic/<tid>')
 def topic(tid):
-    req = requests.get(topic_addr+f"/{tid}")
+    req = requests.get(topic_addr+f"/topic/{tid}")
     return req.text
 
 # @app.route('/topic/<tid>')
@@ -63,7 +64,7 @@ def topic(tid):
 
 @app.route('/Create')
 def create():
-    req = requests.get(create_addr)
+    req = requests.get(create_addr+'/Create')
     return req.text
 
 
@@ -71,35 +72,40 @@ def create():
 
 @app.route('/auth/login')
 def login():
-    req = requests.get(auth_addr+"/login")
+    req = requests.get(auth_addr+"/auth/login")
     return req.text
 
 @app.route('/auth/login/login_process', methods = ['POST'])
 def login_process():
     data = request.get_data()
     req_data = data_parsing(data)
-    req = requests.post(auth_addr+"/login/login_process", data = req_data)
+    req = requests.post(auth_addr+"/auth/login/login_process", data = req_data)
     return req.text
 
 @app.route('/auth/logout_process')
 def logout():
-    req = requests.get(auth_addr+"/logout_process")
+    req = requests.get(auth_addr+"/auth/logout_process")
     return req.text
 
 @app.route('/auth/join')
 def join():
-    req = requests.get(auth_addr+"/join")
+    req = requests.get(auth_addr+"/auth/join")
     return req.text
 
 @app.route('/auth/join_process', methods = ['POST'])
 def join_process():
     data = request.get_data()
     req_data = data_parsing(data)
-    req = requests.post(auth_addr+"/join_process", data = req_data)
+    req = requests.post(auth_addr+"/auth/join_process", data = req_data)
     return req.text
 
 @app.route('/auth/account/<uid>')
 def account(uid):
+    req = requests.get(auth_addr+f"/auth/account/{uid}")
+    return req.text
+
+@app.route('/update/<uid>/edit')
+def update(uid):
     req = requests.get(auth_addr+f"/account/{uid}")
     return req.text
 

@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-v1
+  labels:
+    app: front
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: front
+        version: v1
+    spec:
+      containers:
+      - name: front
+        image: gihonglee/front:1
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: HOME_ADDR
+            value: home.default.svc.cluster.local
+          - name: BOARD_ADDR
+            value: board.default.svc.cluster.local
+          - name: TOPIC_ADDR
+            value: topic.default.svc.cluster.local
+          - name: CREATE_ADDR
+            value: create.default.svc.cluster.local
+          - name: AUTH_ADDR
+            value: auth.default.svc.cluster.local
+          - name: UPDATE_ADDR
+            value: update.default.svc.cluster.local
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
+        ports:
+        - containerPort: 5001
+        securityContext:
+          runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+  labels:
+    app: front
+    service: front
+spec:
+  ports:
+  - port: 8080
+    targetPort: 5001
+    name: http
+  selector:
+    app: front
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: front
+spec:
+  hosts:
+  - "front.default.svc.cluster.local"
+  http:
+  - route:
+    - destination:
+        host: "front.default.svc.cluster.local"

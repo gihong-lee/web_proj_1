@@ -22,17 +22,25 @@ spec:
     spec:
       containers:
       - name: home
-        image: gihonglee/home:3
+        image: gihonglee/home:1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
 ---
 ##################################################################################################
 # board service
@@ -58,17 +66,25 @@ spec:
     spec:
       containers:
       - name: board
-        image: gihonglee/board:3
+        image: gihonglee/board:1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
 ---
 ##################################################################################################
 # auth service
@@ -94,17 +110,25 @@ spec:
     spec:
       containers:
       - name: auth
-        image: gihonglee/auth:3
+        image: gihonglee/auth:1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
 ---
 ##################################################################################################
 # create service
@@ -130,17 +154,25 @@ spec:
     spec:
       containers:
       - name: create
-        image: gihonglee/create:3
+        image: gihonglee/create:1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
 ---
 ##################################################################################################
 # topic service
@@ -166,17 +198,25 @@ spec:
     spec:
       containers:
       - name: topic
-        image: gihonglee/topic:3
+        image: gihonglee/topic:1.0.1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate
 ---
 ##################################################################################################
 # update service
@@ -202,14 +242,22 @@ spec:
     spec:
       containers:
       - name: update
-        image: gihonglee/update:3
+        image: gihonglee/update:1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"          
+        volumeMounts:
+          - mountPath: /app/sessions
+            name: sessions
         ports:
         - containerPort: 8000
         securityContext:
           runAsUser: 1000
+      volumes:
+        - name: sessions
+          hostPath:
+            path: /root/sessions
+            type: DirectoryOrCreate

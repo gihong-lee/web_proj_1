@@ -43,12 +43,12 @@ app.get('/topic/:tid', (req, res) => {
 
   DB.query(`SELECT topic.id, title, context, created, name, topic.author_id
   FROM ex_database.topic LEFT JOIN account.user 
-  ON ex_database.topic.author_id = account.useapp.id
+  ON ex_database.topic.author_id = account.user.id
   WHERE topic.id = ?;`, [topicId], (err, topic) => {
     if(err) throw err;
     DB.query(`SELECT comment.id,comment.topic_id,context, created, name ,comment.author_id
     FROM ex_database.comment LEFT JOIN account.user 
-    ON ex_database.comment.author_id = account.useapp.id 
+    ON ex_database.comment.author_id = account.user.id 
     WHERE comment.topic_id = ? ORDER BY comment.created;`,[topicId], (err2, comments) => {
       if(err2) throw err2;
       let controlEnable = false;
