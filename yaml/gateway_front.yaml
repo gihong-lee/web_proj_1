@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: grad-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grad
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - grad-gateway
+  http:
+  - route:
+    - destination:
+        host: "front.default.svc.cluster.local"
+        port:
+          number: 8888
+  
