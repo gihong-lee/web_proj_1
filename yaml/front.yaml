@@ -56,7 +56,7 @@ metadata:
     service: front
 spec:
   ports:
-  - port: 8080
+  - port: 8888
     targetPort: 5001
     name: http
   selector:
