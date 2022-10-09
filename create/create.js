@@ -35,7 +35,7 @@ DB.connect();
 
 app.get('/Create',(req,res) => {
 	if(!req.session.is_logined) {
-	  res.redirect(`/`);
+	  res.redirect(process.env.REDIRECT_ADDR);
 	  return false;
 	}
 	const html = template.html('Create',

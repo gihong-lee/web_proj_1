@@ -161,6 +161,8 @@ spec:
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+          - name:  REDIRECT_ADDR
+            value: home.default.svc.cluster.local
         volumeMounts:
           - mountPath: /app/sessions
             name: sessions
@@ -261,3 +263,66 @@ spec:
           hostPath:
             path: /root/sessions
             type: DirectoryOrCreate
+---
+##################################################################################################
+# rtopic service
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtopic
+  labels:
+    app: rtopic
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtopic
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: topic
+        version: v2
+    spec:
+      containers:
+      - name: rtopic
+        image: gihonglee/rtopic:1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000
+---
+##################################################################################################
+# home v2 service
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-v2
+  labels:
+    app: homev2
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homev2
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: homev2
+        version: v2
+    spec:
+      containers:
+      - name: homev2
+        image: gihonglee/homev2:1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000
+---
