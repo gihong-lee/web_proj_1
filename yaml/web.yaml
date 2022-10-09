@@ -22,13 +22,15 @@ spec:
     spec:
       containers:
       - name: home
-        image: gihonglee/home:1
+        image: gihonglee/home:1.0.1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+          - name: MOCK_ADDR
+            value: tag.default.svc.cluster.local
         volumeMounts:
           - mountPath: /app/sessions
             name: sessions
@@ -110,13 +112,15 @@ spec:
     spec:
       containers:
       - name: auth
-        image: gihonglee/auth:1
+        image: gihonglee/auth:1.0.1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
             value: grad-db.default.svc.cluster.local
           - name: MYSQL_PORT
             value: "3306"     
+          - name: MOCK_ADDR
+            value: tag.default.svc.cluster.local
         volumeMounts:
           - mountPath: /app/sessions
             name: sessions
@@ -154,7 +158,7 @@ spec:
     spec:
       containers:
       - name: create
-        image: gihonglee/create:1
+        image: gihonglee/create:1.0.1
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -163,6 +167,8 @@ spec:
             value: "3306"     
           - name:  REDIRECT_ADDR
             value: home.default.svc.cluster.local
+          - name: MOCK_ADDR
+            value: tag.default.svc.cluster.local
         volumeMounts:
           - mountPath: /app/sessions
             name: sessions
@@ -200,7 +206,7 @@ spec:
     spec:
       containers:
       - name: topic
-        image: gihonglee/topic:1.0.1
+        image: gihonglee/topic:1.0.2
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_HOST
@@ -288,8 +294,11 @@ spec:
     spec:
       containers:
       - name: rtopic
-        image: gihonglee/rtopic:1
+        image: gihonglee/rtopic:1.0.1
         imagePullPolicy: IfNotPresent
+        env:
+          - name: OPER
+            value: "10"
         ports:
         - containerPort: 8000
         securityContext:
@@ -326,3 +335,30 @@ spec:
         securityContext:
           runAsUser: 1000
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag
+  labels:
+    app: tag
+    version: v1 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tag
+      version: v1 
+  template:
+    metadata:
+      labels:
+        app: tag
+        version: v1 
+    spec:
+      containers:
+      - name: tag
+        image: gihonglee/mock:1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        securityContext:
+          runAsUser: 1000

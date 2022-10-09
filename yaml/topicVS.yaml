@@ -8,6 +8,7 @@ metadata:
 spec:
   ports:
   - port: 8080
+    targetPort: 8000
     name: http
   selector:
     app: topic
@@ -28,7 +29,7 @@ spec:
   trafficPolicy:
     #2. Circuit Breaker가 작동하는 기준을 설정
     outlierDetection:
-      consecutiveErrors: 3
+      consecutive5xxErrors: 3
       interval: 20s
       baseEjectionTime: 30s
       maxEjectionPercent: 100
@@ -41,11 +42,21 @@ spec:
   hosts:
   - "topic.default.svc.cluster.local"
   http:
+  - match:
+    - headers:
+        end-user:
+          exact: test
+    fault:
+      abort:
+        percentage:
+          value: 0
+        httpStatus: 500
   - route:
     - destination:
         host: "topic.default.svc.cluster.local"
         subset: topic
-  - route:
+      weight: 50
     - destination:
         host: "topic.default.svc.cluster.local"
         subset: rtopic
+      weight: 50

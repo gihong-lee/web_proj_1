@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
 const mysql = require('mysql');
-
+const request = require('request');
 const DB_Info = require('/app/lib/DB_Info')
 
 const port = 8000;
@@ -33,8 +33,10 @@ const DB = mysql.createConnection({
 })
 
 DB.connect()
+const url = `http://`+ process.env.MOCK_ADDR +`:8080/`;
 
 app.get('/auth/login',(req, res) => {
+  request({url: url,method: "GET"})
   const html = template.html('Login','','',
   `<form action= "/auth/login/login_process" method ="post">
   <input type="text"name = "aid" placeholder="ID">
@@ -71,6 +73,7 @@ app.get('/auth/logout_process', (req, res) => {
 })
 
 app.get('/auth/join',(req, res) => {
+  request({url: url,method: "GET"})
   const html = template.html('Join', '', '',
   `<form action="/auth/join_process" method="post">
     <p>

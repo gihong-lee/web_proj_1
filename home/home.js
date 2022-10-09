@@ -3,7 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
-
+const request = require('request');
 const DB_Info = require('/app/lib/DB_Info')
 
 const port = 8000;
@@ -22,8 +22,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/app/javascript',express.static('javascript'));
 
 const template = require('/app/lib/template')
+const url = `http://`+ process.env.MOCK_ADDR +`:8080/`;
 
 app.get('/',(req, res) => {
+  request({url: url,method: "GET"})
   const html = `
   <!DOCTYPE html>
   <html lang="en">

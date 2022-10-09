@@ -107,3 +107,31 @@ spec:
   - route:
     - destination:
         host: "update.default.svc.cluster.local"
+        ##########################################################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tag
+  labels:
+    app: tag
+    service: tag
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8000
+    name: tcp
+  selector:
+    app: tag
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: tag
+spec:
+  hosts:
+  - "tag.default.svc.cluster.local"
+  http:
+  - route:
+    - destination:
+        host: "tag.default.svc.cluster.local"

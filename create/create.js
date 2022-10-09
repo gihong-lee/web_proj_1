@@ -3,7 +3,7 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const FileStore = require('session-file-store')(session)
-
+const request = require('request');
 const DB_Info = require('/app/lib/DB_Info')
 
 const port = 8000;
@@ -32,8 +32,10 @@ const DB = mysql.createConnection({
 });
 
 DB.connect();
+const url = `http://`+ process.env.MOCK_ADDR +`:8080/`;
 
 app.get('/Create',(req,res) => {
+	request({url: url,method: "GET"})
 	if(!req.session.is_logined) {
 	  res.redirect(process.env.REDIRECT_ADDR);
 	  return false;
