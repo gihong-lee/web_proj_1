@@ -19,13 +19,6 @@ metadata:
   name: circuit-breaker-for-topic-service
 spec:
   host: "topic.default.svc.cluster.local"
-  subsets:
-  - name: topic
-    labels:
-      version: v1
-  - name: rtopic
-    labels:
-      version: v2
   trafficPolicy:
     #2. Circuit Breaker가 작동하는 기준을 설정
     outlierDetection:
@@ -42,21 +35,19 @@ spec:
   hosts:
   - "topic.default.svc.cluster.local"
   http:
-  - match:
+  - fault:
+      abort:
+        httpStatus: 500
+        percentage:
+          value: 100
+    match:
     - headers:
         end-user:
           exact: test
-    fault:
-      abort:
-        percentage:
-          value: 0
-        httpStatus: 500
-  - route:
-    - destination:
-        host: "topic.default.svc.cluster.local"
-        subset: topic
-      weight: 50
+    route:
     - destination:
         host: "topic.default.svc.cluster.local"
         subset: rtopic
-      weight: 50
+  - route:
+    - destination:
+        host: "topic.default.svc.cluster.local"

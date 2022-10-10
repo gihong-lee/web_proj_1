@@ -1,3 +1,4 @@
+from email import header
 from flask import Flask, request
 import requests
 import os
@@ -25,7 +26,7 @@ def data_parsing(data):
 
 @app.route('/')
 def home():
-    req = requests.get(home_addr)
+    req = requests.get(home_addr, headers = {"end-user":request.headers['end-user']})
     return req.text
 
 
@@ -34,14 +35,14 @@ def home():
 
 @app.route('/board/')
 def board():
-    req = requests.get(board_addr+"/board/")
+    req = requests.get(board_addr+"/board/", headers = {"end-user":request.headers['end-user']})
     return req.text
 
 #####################################
 
 @app.route('/topic/<tid>')
 def topic(tid):
-    req = requests.get(topic_addr+f"/topic/{tid}")
+    req = requests.get(topic_addr+f"/topic/{tid}", headers = {"end-user":request.headers['end-user']})
     return req.text
 
 # @app.route('/topic/<tid>')
@@ -64,7 +65,7 @@ def topic(tid):
 
 @app.route('/Create')
 def create():
-    req = requests.get(create_addr+'/Create')
+    req = requests.get(create_addr+'/Create', headers = {"end-user":request.headers['end-user']})
     return req.text
 
 
@@ -72,7 +73,7 @@ def create():
 
 @app.route('/auth/login')
 def login():
-    req = requests.get(auth_addr+"/auth/login")
+    req = requests.get(auth_addr+"/auth/login", headers = {"end-user":request.headers['end-user']})
     return req.text
 
 @app.route('/auth/login/login_process', methods = ['POST'])
@@ -89,7 +90,7 @@ def logout():
 
 @app.route('/auth/join')
 def join():
-    req = requests.get(auth_addr+"/auth/join")
+    req = requests.get(auth_addr+"/auth/join", headers = {"end-user":request.headers['end-user']})
     return req.text
 
 @app.route('/auth/join_process', methods = ['POST'])
@@ -102,11 +103,6 @@ def join_process():
 @app.route('/auth/account/<uid>')
 def account(uid):
     req = requests.get(auth_addr+f"/auth/account/{uid}")
-    return req.text
-
-@app.route('/update/<uid>/edit')
-def update(uid):
-    req = requests.get(auth_addr+f"/account/{uid}")
     return req.text
 
 app.run(host='0.0.0.0',port=5001)

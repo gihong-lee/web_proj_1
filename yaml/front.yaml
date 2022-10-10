@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: front
-        image: gihonglee/front:1
+        image: gihonglee/front:1.0.1
         imagePullPolicy: IfNotPresent
         env:
           - name: HOME_ADDR
