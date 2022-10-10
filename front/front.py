@@ -5,12 +5,12 @@ import os
 
 app = Flask(__name__)
 
-home_addr = "http://" + os.environ['HOME_ADDR'] + ":8080" 
-board_addr = "http://" + os.environ['BOARD_ADDR'] + ":8080"
-topic_addr = "http://" + os.environ['TOPIC_ADDR'] + ":8080"
-create_addr = "http://" + os.environ['CREATE_ADDR'] + ":8080"
-auth_addr = "http://" + os.environ['AUTH_ADDR'] + ":8080"
-update_addr = "http://" + os.environ['UPDATE_ADDR'] + ":8080"
+home_addr = "http://" + str(os.environ['HOME_ADDR']) + ":8080" 
+board_addr = "http://" + str(os.environ['BOARD_ADDR']) + ":8080"
+topic_addr = "http://" + str(os.environ['TOPIC_ADDR']) + ":8080"
+create_addr = "http://" + str(os.environ['CREATE_ADDR']) + ":8080"
+auth_addr = "http://" + str(os.environ['AUTH_ADDR']) + ":8080"
+update_addr = "http://" + str(os.environ['UPDATE_ADDR']) + ":8080"
 
 
 def data_parsing(data):
@@ -26,7 +26,13 @@ def data_parsing(data):
 
 @app.route('/')
 def home():
-    req = requests.get(home_addr, headers = {"end-user":request.headers['end-user']})
+    headers = {}
+    try:
+        headers["end-user"] = request.headers['end-user']
+    except:
+        headers["end-user"] = "NoBody"
+
+    req = requests.get(home_addr, headers=headers)
     return req.text
 
 
@@ -35,14 +41,20 @@ def home():
 
 @app.route('/board/')
 def board():
-    req = requests.get(board_addr+"/board/", headers = {"end-user":request.headers['end-user']})
+    req = requests.get(board_addr+"/board/")
     return req.text
 
 #####################################
 
 @app.route('/topic/<tid>')
 def topic(tid):
-    req = requests.get(topic_addr+f"/topic/{tid}", headers = {"end-user":request.headers['end-user']})
+    headers = {}
+    try:
+        headers["end-user"] = request.headers['end-user']
+    except:
+        headers["end-user"] = "NoBody"
+        
+    req = requests.get(topic_addr+f"/topic/{tid}", headers=headers)
     return req.text
 
 # @app.route('/topic/<tid>')
@@ -65,7 +77,7 @@ def topic(tid):
 
 @app.route('/Create')
 def create():
-    req = requests.get(create_addr+'/Create', headers = {"end-user":request.headers['end-user']})
+    req = requests.get(create_addr+'/Create')
     return req.text
 
 
@@ -73,7 +85,7 @@ def create():
 
 @app.route('/auth/login')
 def login():
-    req = requests.get(auth_addr+"/auth/login", headers = {"end-user":request.headers['end-user']})
+    req = requests.get(auth_addr+"/auth/login")
     return req.text
 
 @app.route('/auth/login/login_process', methods = ['POST'])
@@ -90,7 +102,7 @@ def logout():
 
 @app.route('/auth/join')
 def join():
-    req = requests.get(auth_addr+"/auth/join", headers = {"end-user":request.headers['end-user']})
+    req = requests.get(auth_addr+"/auth/join")
     return req.text
 
 @app.route('/auth/join_process', methods = ['POST'])
